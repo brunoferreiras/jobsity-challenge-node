@@ -4,19 +4,27 @@ import { StockResponse } from './interfaces/stock-response.interface';
 import { StockController } from './stock.controller';
 import { StockService } from './stock.service';
 import { HttpModule } from '@nestjs/axios';
+import {
+  BadRequestException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import { StockQuoteNotFound } from './exceptions/stock-quote-not-found.exception';
 
 describe('StockController', () => {
-  let stockController: StockController;
+  let controller: StockController;
+  let service: StockService;
   let mockResponse: StockResponse;
+  let mockDto: GetStockDto;
 
   beforeEach(async () => {
-    const stock: TestingModule = await Test.createTestingModule({
+    const stockModule: TestingModule = await Test.createTestingModule({
       imports: [HttpModule],
       controllers: [StockController],
       providers: [StockService],
     }).compile();
 
-    stockController = stock.get<StockController>(StockController);
+    controller = stockModule.get<StockController>(StockController);
+    service = stockModule.get<StockService>(StockService);
     mockResponse = {
       name: 'AGILENT TECHNOLOGIES',
       date: '2022-01-14',
@@ -28,15 +36,48 @@ describe('StockController', () => {
       low: 142.36,
       volume: 2225442,
     };
+    mockDto = {
+      code: 'any',
+      type: 'json',
+    };
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
 
   describe('getStock', () => {
-    it('should return "StockResponse"', () => {
+    it('should call service with correct values', () => {
       const dto: GetStockDto = {
         code: 'a.us',
         type: 'json',
       };
-      expect(stockController.getStock(dto)).toBe(mockResponse);
+      const spy = jest.spyOn(service, 'getStockQuote');
+      controller.getStock(dto);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should be throw ServiceUnavailableException when service fails', async () => {
+      jest
+        .spyOn(service, 'getStockQuote')
+        .mockRejectedValue(new ServiceUnavailableException());
+      await expect(controller.getStock(mockDto)).rejects.toThrow(
+        new ServiceUnavailableException(),
+      );
+    });
+
+    it('should be throw StockQuoteNotFound when service not found', async () => {
+      jest
+        .spyOn(service, 'getStockQuote')
+        .mockRejectedValue(new StockQuoteNotFound('any_code'));
+      await expect(controller.getStock(mockDto)).rejects.toThrow(
+        new StockQuoteNotFound('any_code'),
+      );
+    });
+
+    it('should return StockResponse when service returns', async () => {
+      jest.spyOn(service, 'getStockQuote').mockResolvedValue(mockResponse);
+      expect(await controller.getStock(mockDto)).toEqual(mockResponse);
     });
   });
 });

@@ -1,0 +1,23 @@
+version: '3.7'
+
+networks:
+  stock_network:
+    name: stock_network
+
+services:
+  stock:
+    container_name: stock-service
+    build:
+      context: ./stock-service
+      dockerfile: ./Dockerfile
+      target: development
+    restart: unless-stopped
+    command: npm run start:debug
+    volumes:
+      - ./stock-service:/app
+      - /app/node_modules
+    networks:
+      stock_network:
+    ports:
+      - 3041:3000
+      - 9252:9252

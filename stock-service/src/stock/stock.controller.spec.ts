@@ -4,11 +4,8 @@ import { StockResponse } from './interfaces/stock-response.interface';
 import { StockController } from './stock.controller';
 import { StockService } from './stock.service';
 import { HttpModule } from '@nestjs/axios';
-import {
-  BadRequestException,
-  ServiceUnavailableException,
-} from '@nestjs/common';
-import { StockQuoteNotFound } from './exceptions/stock-quote-not-found.exception';
+import { StockQuoteNotFoundException } from './exceptions/stock-quote-not-found.exception';
+import { ExternalServiceUnavailableException } from './exceptions/external-service-unavailable.exception';
 
 describe('StockController', () => {
   let controller: StockController;
@@ -20,7 +17,9 @@ describe('StockController', () => {
     const stockModule: TestingModule = await Test.createTestingModule({
       imports: [HttpModule],
       controllers: [StockController],
-      providers: [StockService],
+      providers: [
+        { provide: StockService, useValue: { getStockQuote: jest.fn() } },
+      ],
     }).compile();
 
     controller = stockModule.get<StockController>(StockController);
@@ -57,21 +56,21 @@ describe('StockController', () => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
-    it('should be throw ServiceUnavailableException when service fails', async () => {
+    it('should be throw ExternalServiceUnavailableException when service fails', async () => {
       jest
         .spyOn(service, 'getStockQuote')
-        .mockRejectedValue(new ServiceUnavailableException());
+        .mockRejectedValue(new ExternalServiceUnavailableException());
       await expect(controller.getStock(mockDto)).rejects.toThrow(
-        new ServiceUnavailableException(),
+        new ExternalServiceUnavailableException(),
       );
     });
 
     it('should be throw StockQuoteNotFound when service not found', async () => {
       jest
         .spyOn(service, 'getStockQuote')
-        .mockRejectedValue(new StockQuoteNotFound('any_code'));
+        .mockRejectedValue(new StockQuoteNotFoundException('any_code'));
       await expect(controller.getStock(mockDto)).rejects.toThrow(
-        new StockQuoteNotFound('any_code'),
+        new StockQuoteNotFoundException('any_code'),
       );
     });
 

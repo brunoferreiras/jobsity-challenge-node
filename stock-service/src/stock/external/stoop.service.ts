@@ -20,7 +20,7 @@ export class StoopService implements ExternalService {
   }
 
   private parseResponse(data: any): StockResponse {
-    const stock = data.symbols[0] || {};
+    const stock = data.symbols?.[0] || {};
     return {
       code: stock.symbol,
       date: stock.date,

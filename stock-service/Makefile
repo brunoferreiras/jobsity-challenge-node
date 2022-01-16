@@ -3,3 +3,6 @@ logs:
 
 bash:
 	docker exec --user root -it stock-service bash
+
+restart:
+	docker restart stock-service

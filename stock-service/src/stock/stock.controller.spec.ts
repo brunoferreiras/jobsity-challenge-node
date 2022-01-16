@@ -6,6 +6,7 @@ import { StockService } from './stock.service';
 import { HttpModule } from '@nestjs/axios';
 import { StockQuoteNotFoundException } from './exceptions/stock-quote-not-found.exception';
 import { ExternalServiceUnavailableException } from './exceptions/external-service-unavailable.exception';
+import { mockGetStockDto } from '../../test/helpers';
 
 describe('StockController', () => {
   let controller: StockController;
@@ -35,10 +36,7 @@ describe('StockController', () => {
       low: 142.36,
       volume: 2225442,
     };
-    mockDto = {
-      code: 'any',
-      type: 'json',
-    };
+    mockDto = mockGetStockDto();
   });
 
   it('should be defined', () => {
@@ -49,7 +47,6 @@ describe('StockController', () => {
     it('should call service with correct values', () => {
       const dto: GetStockDto = {
         code: 'a.us',
-        type: 'json',
       };
       const spy = jest.spyOn(service, 'getStockQuote');
       controller.getStock(dto);

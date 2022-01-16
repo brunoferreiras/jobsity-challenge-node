@@ -1,10 +1,7 @@
-import { IsDefined, IsEnum, IsString } from 'class-validator';
-import { ResponseTypes } from '../enums/responses.type';
+import { IsDefined, IsString } from 'class-validator';
 
 export class GetStockDto {
   @IsString()
   @IsDefined()
   code: string;
-  @IsEnum(ResponseTypes)
-  type: string;
 }

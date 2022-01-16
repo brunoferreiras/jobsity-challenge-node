@@ -13,7 +13,7 @@ export class StoopService implements ExternalService {
   }
 
   public async getStockQuote(dto: GetStockDto): Promise<StockResponse> {
-    const url = `${this.endpoint}&s=${dto.code}&e=${dto.type}`;
+    const url = `${this.endpoint}&s=${dto.code}&e=json`;
     const observable = this.httpService.get(url);
     const response = await lastValueFrom(observable);
     return this.parseResponse(response.data);

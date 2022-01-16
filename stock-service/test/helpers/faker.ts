@@ -1,5 +1,4 @@
 import { GetStockDto } from '../../src/stock/dto/get-stock.dto';
-import { ResponseTypes } from '../../src/stock/enums/responses.type';
 import { StockResponse } from '../../src/stock/interfaces/stock-response.interface';
 
 export const mockStockResponse = (): StockResponse => ({
@@ -16,5 +15,4 @@ export const mockStockResponse = (): StockResponse => ({
 
 export const mockGetStockDto = (): GetStockDto => ({
   code: 'any',
-  type: ResponseTypes.JSON,
 });

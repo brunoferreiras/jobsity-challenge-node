@@ -4,4 +4,4 @@ import { StockModule } from './stock/stock.module';
 @Module({
   imports: [StockModule],
 })
-export class AppModule { }
+export class AppModule {}

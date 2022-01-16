@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
+import { GetStockDto } from './dto/get-stock.dto';
+import { StockResponse } from './interfaces/stock-response.interface';
 import { StockService } from './stock.service';
 
-@Controller()
+@Controller('stocks')
 export class StockController {
-  constructor(private readonly service: StockService) { }
+  constructor(private readonly service: StockService) {}
 
   @Get()
-  getStock (): string {
-    return this.service.getStockQuote();
+  async getStock(@Query() params: GetStockDto): Promise<StockResponse> {
+    return await this.service.getStockQuote(params);
   }
 }

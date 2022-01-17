@@ -13,6 +13,12 @@ export const mockStockResponse = (): StockResponse => ({
   volume: 2225442,
 });
 
+export const mockCSVExternalResponse =
+  (): string => `Symbol,Date,Time,Open,High,Low,Close,Volume,Name
+A.US,2022-01-14,22:03:50,144.04,145.15,142.36,144.68,2225442,AGILENT TECHNOLOGIES
+
+`;
+
 export const mockGetStockDto = (): GetStockDto => ({
   code: 'any',
 });

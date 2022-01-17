@@ -2,9 +2,14 @@ import { HttpModule, HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { of } from 'rxjs';
-import { mockGetStockDto, mockStockResponse } from '../../../test/helpers';
+import {
+  mockCSVExternalResponse,
+  mockGetStockDto,
+  mockStockResponse,
+} from '../../../test/helpers';
 import { StoopService } from './stoop.service';
 import { StockResponse } from '../interfaces/stock-response.interface';
+import { ResponseTypes } from '../enums/responses.type';
 
 describe('StoopService', () => {
   let service: StoopService;
@@ -24,7 +29,7 @@ describe('StoopService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('getStockQuote', () => {
+  describe('getStockQuote using JSON', () => {
     it('should be made request to api service with correct params', async () => {
       const result: AxiosResponse = {
         data: {
@@ -50,9 +55,11 @@ describe('StoopService', () => {
       const spyHttpService = jest
         .spyOn(httpService, 'get')
         .mockImplementation(() => of(result));
-      await service.getStockQuote(mockGetStockDto());
+      await service
+        .setExternalResponseType(ResponseTypes.JSON)
+        .getStockQuote(mockGetStockDto());
       expect(spyHttpService).toHaveBeenCalledWith(
-        `https://stooq.com/q/l/?f=sd2t2ohlcvn&s=${
+        `https://stooq.com/q/l/?f=sd2t2ohlcvn&h&s=${
           mockGetStockDto().code
         }&e=json`,
       );
@@ -67,7 +74,9 @@ describe('StoopService', () => {
         config: {},
       };
       jest.spyOn(httpService, 'get').mockImplementation(() => of(result));
-      const response = await service.getStockQuote(mockGetStockDto());
+      const response = await service
+        .setExternalResponseType(ResponseTypes.JSON)
+        .getStockQuote(mockGetStockDto());
       expect(response).toEqual({
         code: undefined,
         name: undefined,
@@ -91,6 +100,67 @@ describe('StoopService', () => {
             },
           ],
         },
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {},
+      };
+      jest.spyOn(httpService, 'get').mockImplementation(() => of(result));
+      const response = await service
+        .setExternalResponseType(ResponseTypes.JSON)
+        .getStockQuote(mockGetStockDto());
+      expect(response).toEqual(mockStockResponse());
+    });
+  });
+
+  describe('getStockQuote using CSV', () => {
+    it('should be made request to api service with correct params', async () => {
+      const result: AxiosResponse = {
+        data: mockCSVExternalResponse(),
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {},
+      };
+      const spyHttpService = jest
+        .spyOn(httpService, 'get')
+        .mockImplementation(() => of(result));
+      await service.getStockQuote(mockGetStockDto());
+      expect(spyHttpService).toHaveBeenCalledWith(
+        `https://stooq.com/q/l/?f=sd2t2ohlcvn&h&s=${
+          mockGetStockDto().code
+        }&e=csv`,
+      );
+    });
+
+    it('should be return StockResponse incomplete when service not found', async () => {
+      const result: AxiosResponse = {
+        data: `Symbol,Date,Time,Open,High,Low,Close,Volume,Name
+any,N/D,N/D,N/D,N/D,N/D,N/D,N/D,any
+`,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {},
+      };
+      jest.spyOn(httpService, 'get').mockImplementation(() => of(result));
+      const response = await service.getStockQuote(mockGetStockDto());
+      expect(response).toEqual({
+        code: 'any',
+        close: 'N/D',
+        date: 'N/D',
+        high: 'N/D',
+        low: 'N/D',
+        name: 'any',
+        open: 'N/D',
+        time: 'N/D',
+        volume: 'N/D',
+      } as any);
+    });
+
+    it('should be return StockResponse when service success', async () => {
+      const result: AxiosResponse = {
+        data: mockCSVExternalResponse(),
         status: 200,
         statusText: 'OK',
         headers: {},

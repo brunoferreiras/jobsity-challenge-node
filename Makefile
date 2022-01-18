@@ -1,5 +1,8 @@
 up:
-	docker-compose up -d --build
+	docker-compose up -d
+
+down:
+	docker-compose down
 
 up-stock:
 	docker-compose up -d --build stock
@@ -36,3 +39,6 @@ logs-api:
 
 bash-api:
 	docker-compose exec --user root api bash
+
+logs-mongo:
+	docker-compose logs -f mongo

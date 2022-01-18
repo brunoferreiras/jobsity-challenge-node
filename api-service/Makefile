@@ -1,8 +1,8 @@
 logs:
-	docker logs -f stock-service
+	docker logs -f stock-api
 
 bash:
-	docker exec --user root -it stock-service bash
+	docker exec --user root -it stock-api bash
 
 restart:
-	docker restart stock-service
+	docker restart stock-api

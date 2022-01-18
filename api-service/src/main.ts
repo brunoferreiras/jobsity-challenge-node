@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { getConnection } from 'typeorm';
 import { AppModule } from './app.module';
 
 const normalizePort = (value: string): string | number => {
@@ -22,6 +23,14 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  await app.listen(port);
+  // Check database connection
+  const connection = getConnection()
+  const { isConnected } = connection
+  isConnected
+    ? console.log(`🌨️  Database connected`)
+    : console.log(`❌  Database connect error`)
+  await app.listen(port, () => {
+    console.log(`App is running on: ${port as string}`)
+  });
 }
 bootstrap();

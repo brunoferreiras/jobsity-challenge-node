@@ -1,10 +1,10 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, Index, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, ObjectID, ObjectIdColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('users')
 export class UserEntity {
   @ObjectIdColumn()
-  id: ObjectID;
+  id?: ObjectID;
 
   @Column()
   @Index({ unique: true })
@@ -16,4 +16,10 @@ export class UserEntity {
 
   @Column()
   type: string;
+
+  @CreateDateColumn()
+  created_at: Date
+
+  @UpdateDateColumn()
+  updated_at: Date
 }

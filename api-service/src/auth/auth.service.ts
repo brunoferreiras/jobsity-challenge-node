@@ -1,10 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticationDto } from './dto/authentication.dto';
 import { TokenModel } from './interfaces/auth.interface';
 import { ConfigService } from '@nestjs/config';
 import { compare } from 'bcrypt'
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -15,13 +16,19 @@ export class AuthService {
   ) { }
 
   async validateUser (email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findByEmail(email);
-    const isMatchPassword = await compare(pass, user?.password)
-    if (user && isMatchPassword) {
-      const { password, ...result } = user;
-      return result;
+    let user: UserEntity
+    try {
+      user = await this.usersService.findByEmail(email)
+    } catch (error) {
+      Logger.log('Error on find user', error)
+      return null;
     }
-    return null;
+    const isMatchPassword = await compare(pass, user.password)
+    if (!isMatchPassword) {
+      return null;
+    }
+    const { password, ...result } = user;
+    return result;
   }
 
   async login (authDto: AuthenticationDto): Promise<TokenModel> {

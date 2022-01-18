@@ -13,6 +13,8 @@ services:
       target: development
     restart: unless-stopped
     command: npm run start:debug
+    environment:
+      - PORT=3000
     volumes:
       - ./stock-service:/app
       - /app/node_modules
@@ -21,3 +23,22 @@ services:
     ports:
       - 3041:3000
       - 9252:9252
+
+  api:
+    container_name: stock-api
+    build:
+      context: ./api-service
+      dockerfile: ./Dockerfile
+      target: development
+    restart: unless-stopped
+    command: npm run start:debug
+    environment:
+      - PORT=3040
+    volumes:
+      - ./api-service:/app
+      - /app/node_modules
+    networks:
+      stock_network:
+    ports:
+      - 3040:3040
+      - 9251:9251

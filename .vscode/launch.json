@@ -13,6 +13,16 @@
       "localRoot": "${workspaceFolder}/stock-service",
       "remoteRoot": "/app",
       "protocol": "inspector"
+    },
+    {
+      "name": "Docker: Attach to Api Service",
+      "type": "node",
+      "request": "attach",
+      "port": 9251,
+      "address": "0.0.0.0",
+      "localRoot": "${workspaceFolder}/api-service",
+      "remoteRoot": "/app",
+      "protocol": "inspector"
     }
   ]
 }

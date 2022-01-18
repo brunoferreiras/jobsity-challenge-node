@@ -18,3 +18,17 @@ services:
     ports:
       - 3041:3000
       - 9252:9252
+  
+  api:
+    container_name: stock-api
+    build:
+      context: ./api-service
+      dockerfile: ./Dockerfile
+      target: production
+    restart: unless-stopped
+    command: npm run start:prod
+    networks:
+      stock_network:
+    ports:
+      - 3040:3000
+      - 9251:9252

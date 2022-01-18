@@ -1,5 +1,8 @@
-up-stock:
+up:
 	docker-compose up -d --build
+
+up-stock:
+	docker-compose up -d --build stock
 
 up-stock-prod:
 	docker-compose -f docker-compose-prod.yml up -d --build
@@ -15,3 +18,21 @@ logs-stock:
 
 bash-stock:
 	docker-compose exec --user root stock bash
+
+up-api:
+	docker-compose up -d --build api
+
+up-api-prod:
+	docker-compose -f docker-compose-prod.yml up -d --build
+
+down-api-prod:
+	docker-compose -f docker-compose-prod.yml down
+
+down-api:
+	docker-compose down
+
+logs-api:
+	docker-compose logs -f api
+
+bash-api:
+	docker-compose exec --user root api bash

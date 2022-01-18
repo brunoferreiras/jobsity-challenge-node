@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { getConnection } from 'typeorm';
 import { AppModule } from './app.module';
@@ -27,10 +27,10 @@ async function bootstrap() {
   const connection = getConnection()
   const { isConnected } = connection
   isConnected
-    ? console.log(`🌨️  Database connected`)
-    : console.log(`❌  Database connect error`)
+    ? Logger.log(`🌨️  Database connected`)
+    : Logger.log(`❌  Database connect error`)
   await app.listen(port, () => {
-    console.log(`App is running on: ${port as string}`)
+    Logger.log(`App is running on: ${port as string}`)
   });
 }
 bootstrap();

@@ -13,7 +13,6 @@ import configuration from './config/configuration';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        console.log("config => ", config.get('database.host'))
         return {
           type: 'mongodb',
           host: config.get('database.host'),

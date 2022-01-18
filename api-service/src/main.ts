@@ -12,11 +12,11 @@ const normalizePort = (value: string): string | number => {
     return port;
   }
   return 3040;
-}
+};
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = normalizePort(process.env.PORT)
+  const port = normalizePort(process.env.PORT);
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -24,13 +24,13 @@ async function bootstrap() {
     }),
   );
   // Check database connection
-  const connection = getConnection()
-  const { isConnected } = connection
+  const connection = getConnection();
+  const { isConnected } = connection;
   isConnected
     ? Logger.log(`🌨️  Database connected`)
-    : Logger.log(`❌  Database connect error`)
+    : Logger.log(`❌  Database connect error`);
   await app.listen(port, () => {
-    Logger.log(`App is running on: ${port as string}`)
+    Logger.log(`App is running on: ${port as string}`);
   });
 }
 bootstrap();

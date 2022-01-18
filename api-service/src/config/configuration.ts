@@ -8,6 +8,10 @@ export default () => ({
     password: process.env.DB_PASSWORD,
   },
   bcrypt: {
-    salt: process.env.BCRYPT_SALT || 12
+    salt: process.env.BCRYPT_SALT || 12,
   },
-})
+  jwt: {
+    secret: process.env.JWT_SECRET || 'secret',
+    expiresIn: parseInt(process.env.JWT_EXPIRES_IN, 10) || 3600,
+  },
+});

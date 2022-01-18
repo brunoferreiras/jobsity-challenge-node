@@ -8,7 +8,7 @@ import configuration from './config/configuration';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [configuration]
+      load: [configuration],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -27,13 +27,13 @@ import configuration from './config/configuration';
           synchronize: true,
           keepConnectionAlive: true,
           useUnifiedTopology: true,
-        }
+        };
       },
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

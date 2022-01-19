@@ -4,7 +4,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { AuthenticationDto } from './dto/authentication.dto';
 import { TokenModel } from './interfaces/auth.interface';
 import { UserEntity } from '../users/entities/user.entity';
-import { AuthUser } from '../common/decorators/auth-user.decorator';
+import { AuthUser } from './decorators/auth-user.decorator';
 
 @Controller('auth')
 export class AuthController {

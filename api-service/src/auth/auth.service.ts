@@ -37,7 +37,8 @@ export class AuthService {
       throw new UnauthorizedException();
     }
     const payload = {
-      id: user.id,
+      id: user._id,
+      type: user.type,
     };
     const expiresIn = this.configService.get('jwt.expiresIn')
     return {

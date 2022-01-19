@@ -1,6 +1,9 @@
 import { Body, Controller, Get, HttpCode, Post, UseGuards } from '@nestjs/common';
-import { AuthUser } from 'src/common/decorators/auth-user.decorator';
+import { AuthUser } from 'src/auth/decorators/auth-user.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/roles/role.enum';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 import { StocksService } from 'src/stocks/stocks.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
@@ -28,8 +31,9 @@ export class UsersController {
   }
 
   @Get('stats')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(200)
+  @Roles(Role.SuperUser)
   async stats (@AuthUser() user: UserEntity): Promise<UserResponse> {
     return await this.stocksService.getStats(user.id);
   }

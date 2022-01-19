@@ -1,5 +1,5 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { AuthUser } from 'src/common/decorators/auth-user.decorator';
+import { AuthUser } from 'src/auth/decorators/auth-user.decorator';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { GetStockDto } from './dto/get-stock.dto';

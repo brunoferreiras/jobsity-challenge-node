@@ -10,6 +10,9 @@ export default () => ({
   bcrypt: {
     salt: process.env.BCRYPT_SALT || 12,
   },
+  stocks_service: {
+    url: process.env.STOCKS_SERVICE_URL || 'http://stock:3000/api/v1'
+  },
   jwt: {
     secret: process.env.JWT_SECRET || 'secret',
     expiresIn: parseInt(process.env.JWT_EXPIRES_IN, 10) || 3600,

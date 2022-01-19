@@ -1,4 +1,5 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthUser } from 'src/auth/decorators/auth-user.decorator';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { UserEntity } from 'src/users/entities/user.entity';
@@ -7,6 +8,7 @@ import { StockResponse } from './interfaces/stock-response.interface';
 import { StocksService } from './stocks.service';
 
 @Controller('stocks')
+@ApiTags('stocks')
 @UseGuards(JwtAuthGuard)
 export class StocksController {
   constructor(private readonly service: StocksService) { }

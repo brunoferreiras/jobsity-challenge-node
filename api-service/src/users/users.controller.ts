@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpCode, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthUser } from 'src/auth/decorators/auth-user.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/roles/role.enum';
@@ -12,6 +13,7 @@ import { UserResponse } from './interfaces/user-response.interface';
 import { UsersService } from './users.service';
 
 @Controller('users')
+@ApiTags('users')
 export class UsersController {
   constructor(
     private readonly service: UsersService,

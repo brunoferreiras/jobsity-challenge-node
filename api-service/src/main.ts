@@ -2,27 +2,18 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { getConnection } from 'typeorm';
 import { AppModule } from './app.module';
+import { setupSwagger } from './swagger';
 
-const normalizePort = (value: string): string | number => {
-  var port = parseInt(value, 10);
-  if (isNaN(port)) {
-    return value;
-  }
-  if (port >= 0) {
-    return port;
-  }
-  return 3040;
-};
-
-async function bootstrap() {
+async function bootstrap () {
   const app = await NestFactory.create(AppModule);
-  const port = normalizePort(process.env.PORT);
+  const port = process.env.PORT || 3040;
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
     }),
   );
+  setupSwagger(app)
   // Check database connection
   const connection = getConnection();
   const { isConnected } = connection;

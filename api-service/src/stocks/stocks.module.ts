@@ -14,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule
   ],
   controllers: [StocksController],
-  providers: [StocksService]
+  providers: [StocksService],
+  exports: [StocksService]
 })
 export class StocksModule { }

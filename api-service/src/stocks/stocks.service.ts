@@ -35,4 +35,11 @@ export class StocksService {
       close: data.close,
     }
   }
+
+  public async getHistory(userId: string): Promise<any> {
+    return this.repository.find({
+      order: { created_at: -1 },
+      where: { user_id: userId }
+    })
+  }
 }

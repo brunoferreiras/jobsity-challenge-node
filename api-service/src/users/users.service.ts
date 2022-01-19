@@ -12,7 +12,7 @@ import { UserNotFound } from './exceptions/user-not-found.exception';
 export class UsersService {
   constructor(
     private readonly repository: UsersRepository,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
 
   private async generatePassword(password: string): Promise<string> {

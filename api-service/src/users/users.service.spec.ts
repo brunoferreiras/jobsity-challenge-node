@@ -62,4 +62,32 @@ describe('UsersService', () => {
       expect(await service.findByEmail('any_email')).toEqual(userMock)
     })
   })
+
+  describe('findById', () => {
+    it('should be throw if repository throw', async () => {
+      jest.spyOn(repository, 'getById').mockRejectedValue(new Error())
+      await expect(service.findById('INVALID')).rejects.toThrow(
+        new Error(),
+      )
+    })
+
+    it('should be throw UserNotFound if repository return undefined', async () => {
+      jest.spyOn(repository, 'getById').mockResolvedValue(undefined)
+      await expect(service.findById('any_email')).rejects.toThrow(
+        new UserNotFound('any_email')
+      )
+    })
+
+    it('should be called repository with correct params', async () => {
+      jest.spyOn(repository, 'getById').mockResolvedValue(userMock)
+      await service.findById('any_email')
+      expect(repository.getById).toBeCalledWith('any_email')
+      expect(repository.getById).toBeCalledTimes(1)
+    })
+
+    it('should be return when repository return', async () => {
+      jest.spyOn(repository, 'getById').mockResolvedValue(userMock)
+      expect(await service.findById('any_email')).toEqual(userMock)
+    })
+  })
 })

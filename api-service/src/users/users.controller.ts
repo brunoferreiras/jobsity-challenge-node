@@ -26,4 +26,11 @@ export class UsersController {
   async history (@AuthUser() user: UserEntity): Promise<UserResponse> {
     return await this.stocksService.getHistory(user.id);
   }
+
+  @Get('stats')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
+  async stats (@AuthUser() user: UserEntity): Promise<UserResponse> {
+    return await this.stocksService.getStats(user.id);
+  }
 }

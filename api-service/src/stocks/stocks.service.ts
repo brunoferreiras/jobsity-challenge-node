@@ -42,4 +42,14 @@ export class StocksService {
       where: { user_id: userId }
     })
   }
+
+  public async getStats (userId: string): Promise<any> {
+    return await this.repository.aggregate([
+      { $match: { user_id: userId } },
+      { $group: { _id: "$symbol", quantity: { $sum: 1 } } },
+      { $project: { _id: 0, stock: { $toLower: "$_id" }, times_requested: "$quantity" } },
+      { $sort: { "times_requested": -1 } },
+      { $limit: 5 }
+    ]).toArray()
+  }
 }

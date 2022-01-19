@@ -8,5 +8,5 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  type: string;
+  type?: string;
 }

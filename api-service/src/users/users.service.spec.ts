@@ -1,10 +1,13 @@
 import { ConfigService } from "@nestjs/config"
 import { Test, TestingModule } from "@nestjs/testing"
 import { mockUser } from "../../test/helpers"
+import { CreateUserDto } from "./dto/create-user.dto"
 import { UserEntity } from "./entities/user.entity"
 import { UserNotFound } from "./exceptions/user-not-found.exception"
 import { UsersRepository } from "./users.repository"
 import { UsersService } from "./users.service"
+
+jest.mock('bcrypt')
 
 describe('UsersService', () => {
   let service: UsersService
@@ -14,7 +17,9 @@ describe('UsersService', () => {
   beforeEach(async () => {
     const usersRepositoryMock = {
       getByEmail: jest.fn(),
-      getById: jest.fn()
+      getById: jest.fn(),
+      create: jest.fn(),
+      save: jest.fn()
     }
     const configServiceMock = {
       get: jest.fn(),
@@ -88,6 +93,29 @@ describe('UsersService', () => {
     it('should be return when repository return', async () => {
       jest.spyOn(repository, 'getById').mockResolvedValue(userMock)
       expect(await service.findById('any_email')).toEqual(userMock)
+    })
+  })
+
+  describe('createUser', () => {
+    it('should be throw if repository throw', async () => {
+      const dto: CreateUserDto = { email: 'any_email' }
+      jest.spyOn(repository, 'save').mockRejectedValue(new Error())
+      await expect(service.createUser(dto)).rejects.toThrow(
+        new Error(),
+      )
+    })
+
+    it('should be return when repository return', async () => {
+      const dto: CreateUserDto = { email: 'any_email' }
+      jest.useFakeTimers('modern').setSystemTime(new Date(2020, 9, 1, 7));
+      jest.spyOn(repository, 'create').mockImplementation(() => ({ 
+        ...dto, password: 'any_hash',
+      } as any))
+      jest.spyOn(repository, 'save').mockResolvedValue(mockUser())
+      expect(await service.createUser(dto)).toEqual({
+        email: 'any_email',
+        password: 'eff91cab11ce37645f3a171e64c79ce4'
+      })
     })
   })
 })

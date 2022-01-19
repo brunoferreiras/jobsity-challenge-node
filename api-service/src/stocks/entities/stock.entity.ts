@@ -25,6 +25,9 @@ export class StockEntity {
   @Column()
   close: string;
 
+  @Column()
+  user_id: string;
+
   @CreateDateColumn()
   created_at: Date
 

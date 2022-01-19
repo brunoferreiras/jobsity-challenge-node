@@ -16,14 +16,16 @@ export class StocksService {
     this.endpoint = `${configService.get<string>('stocks_service.url')}/stocks`
   }
 
-  public async getStock (code: string): Promise<StockResponse> {
+  public async getStock (code: string, userId: string): Promise<StockResponse> {
     const url = `${this.endpoint}?code=${code}`;
     const observable = this.httpService.get(url);
     const response = await lastValueFrom(observable);
-    return this.parseResponse(response.data)
+    const stock = this.parseResponse(response.data)
+    this.repository.registerRequest({ ...stock, user_id: userId })
+    return stock
   }
 
-  private parseResponse(data: any): StockResponse {
+  private parseResponse (data: any): StockResponse {
     return {
       name: data.name,
       symbol: data.code,

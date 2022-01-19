@@ -5,7 +5,7 @@ import { Column, CreateDateColumn, Entity, Index, ObjectID, ObjectIdColumn, Upda
 export class UserEntity {
   @ObjectIdColumn()
   @Transform(({ value }) => { return value.toString() }, { toPlainOnly: true })
-  id?: ObjectID;
+  _id?: ObjectID;
 
   @Column()
   @Index({ unique: true })
@@ -17,6 +17,10 @@ export class UserEntity {
 
   @Column()
   type: string;
+
+  get id(): string {
+    return this._id.toHexString()
+  }
 
   @CreateDateColumn()
   created_at: Date

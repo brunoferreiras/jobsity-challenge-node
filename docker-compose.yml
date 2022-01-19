@@ -32,8 +32,7 @@ services:
       target: development
     restart: unless-stopped
     command: npm run start:debug
-    environment:
-      - PORT=3040
+    env_file: ./api-service/.env
     volumes:
       - ./api-service:/app
       - /app/node_modules
@@ -58,3 +57,23 @@ services:
     ports:
       - '27018:27017'
     restart: unless-stopped
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: stock-mailhog
+    restart: unless-stopped
+    ports: 
+      - 1025:1025
+      - 8025:8025
+    networks:
+      stock_network:
+
+  redis:
+    image: redis:5.0.9
+    container_name: stock-redis
+    command: redis-server --requirepass stockpass --port 6379
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      stock_network:

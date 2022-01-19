@@ -42,3 +42,6 @@ bash-api:
 
 logs-mongo:
 	docker-compose logs -f mongo
+
+redis:
+	docker-compose exec redis redis-cli -a stockpass

@@ -38,4 +38,10 @@ export class UsersController {
   async stats (@AuthUser() user: UserEntity): Promise<UserResponse> {
     return await this.stocksService.getStats(user.id);
   }
+
+  @Post('recoverPassword')
+  @HttpCode(204)
+  async recoverPassword (@Body() body: any): Promise<any> {
+    await this.service.recoverPassword(body.email)
+  }
 }

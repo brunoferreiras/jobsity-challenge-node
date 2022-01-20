@@ -32,3 +32,39 @@ services:
     ports:
       - 3040:3000
       - 9251:9252
+
+  mongo:
+    image: mongo:4.4
+    container_name: stock-mongo
+    networks:
+      stock_network:
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+      - MONGO_INITDB_ROOT_USERNAME=stock
+      - MONGO_INITDB_ROOT_PASSWORD=stockpass
+    volumes:
+      - ./.data/dbdata:/data/db
+    ports:
+      - '27018:27017'
+    restart: unless-stopped
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: stock-mailhog
+    restart: unless-stopped
+    ports: 
+      - 1025:1025
+      - 8025:8025
+    networks:
+      stock_network:
+
+  redis:
+    image: redis:5.0.9
+    container_name: stock-redis
+    command: redis-server --requirepass stockpass --port 6379
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      stock_network:

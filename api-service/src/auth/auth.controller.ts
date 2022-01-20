@@ -5,15 +5,18 @@ import { AuthenticationDto } from './dto/authentication.dto';
 import { TokenModel } from './interfaces/auth.interface';
 import { UserEntity } from '../users/entities/user.entity';
 import { AuthUser } from './decorators/auth-user.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('login')
-  async login(
+  @ApiOperation({ summary: 'Get access token' })
+  @ApiOkResponse({ description: 'Access token' })
+  @ApiUnauthorizedResponse({ description: 'When the user does not exist or password doesn\'t match.' })
+  async login (
     @Body() authenticationDto: AuthenticationDto,
   ): Promise<TokenModel> {
     return await this.authService.login(authenticationDto);
@@ -22,7 +25,10 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('me')
-  getMe(@AuthUser() user: UserEntity): any {
+  @ApiOperation({ summary: 'Get user info' })
+  @ApiOkResponse({ type: UserEntity })
+  @ApiBearerAuth()
+  getMe (@AuthUser() user: UserEntity): any {
     return user;
   }
 }

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { AuthUser } from 'src/auth/decorators/auth-user.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/roles/role.enum';
@@ -22,6 +22,7 @@ export class UsersController {
 
   @Post('register')
   @HttpCode(201)
+  @ApiCreatedResponse({ description: 'The user has been successfully created.' })
   async register (@Body() dto: CreateUserDto): Promise<UserResponse> {
     return await this.service.createUser(dto);
   }
@@ -29,6 +30,8 @@ export class UsersController {
   @Get('history')
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
+  @ApiBearerAuth('User')
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async history (@AuthUser() user: UserEntity, @Query() {page, limit}: PaginationParams): Promise<UserResponse> {
     return await this.stocksService.getHistory(user.id, page, limit);
   }
@@ -37,6 +40,8 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(200)
   @Roles(Role.SuperUser)
+  @ApiBearerAuth('SuperUser')
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async stats (@AuthUser() user: UserEntity): Promise<UserResponse> {
     return await this.stocksService.getStats(user.id);
   }

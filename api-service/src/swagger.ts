@@ -7,6 +7,7 @@ export function setupSwagger (app: INestApplication): void {
     .setDescription('The external service to get stock quotes')
     .addTag('external')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {

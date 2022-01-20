@@ -7,14 +7,14 @@ import * as MD5 from 'crypto-js/md5';
 import { UserResponse } from './interfaces/user-response.interface';
 import { UserEntity } from './entities/user.entity';
 import { UserNotFound } from './exceptions/user-not-found.exception';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly repository: UsersRepository,
     private readonly configService: ConfigService,
-    private readonly mailService: MailService
+    private readonly mailService: MailService,
   ) {}
 
   private async generatePassword(password: string): Promise<string> {
@@ -26,7 +26,7 @@ export class UsersService {
   }
 
   public async createUser(dto: CreateUserDto): Promise<UserResponse> {
-    const password = this.generateRandomPassword()
+    const password = this.generateRandomPassword();
     const hashedPassword = await this.generatePassword(password);
     const user = this.repository.create({
       ...dto,
@@ -54,9 +54,9 @@ export class UsersService {
 
   public async recoverPassword(email: string): Promise<any> {
     const user = await this.findByEmail(email);
-    const password = this.generateRandomPassword()
+    const password = this.generateRandomPassword();
     const hashedPassword = await this.generatePassword(password);
-    await this.repository.update(user.id, { password: hashedPassword })
-    this.mailService.sendEmailWithNewPassword(email, password)
+    await this.repository.update(user.id, { password: hashedPassword });
+    this.mailService.sendEmailWithNewPassword(email, password);
   }
 }

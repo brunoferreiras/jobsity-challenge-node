@@ -1,11 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ObjectID,
+  ObjectIdColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('stocks')
 export class StockEntity {
   @ObjectIdColumn()
-  @Transform(({ value }) => { return value.toString() }, { toPlainOnly: true })
+  @Transform(
+    ({ value }) => {
+      return value.toString();
+    },
+    { toPlainOnly: true },
+  )
   id?: ObjectID;
 
   @Column()
@@ -38,9 +50,9 @@ export class StockEntity {
 
   @CreateDateColumn()
   @ApiProperty({ description: 'The date of creation of the stock register' })
-  created_at: Date
+  created_at: Date;
 
   @UpdateDateColumn()
   @ApiProperty({ description: 'The date of updating of the stock register' })
-  updated_at: Date
+  updated_at: Date;
 }

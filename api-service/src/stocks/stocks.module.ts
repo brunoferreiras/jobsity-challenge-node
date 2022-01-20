@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { StocksService } from './stocks.service';
-import { HttpModule } from '@nestjs/axios'
+import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StockEntity } from './entities/stock.entity';
 import { StocksRepository } from './stocks.repository';
@@ -11,10 +11,10 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     TypeOrmModule.forFeature([StockEntity, StocksRepository]),
     HttpModule,
-    ConfigModule
+    ConfigModule,
   ],
   controllers: [StocksController],
   providers: [StocksService],
-  exports: [StocksService]
+  exports: [StocksService],
 })
-export class StocksModule { }
+export class StocksModule {}

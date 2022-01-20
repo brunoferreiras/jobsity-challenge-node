@@ -1,8 +1,8 @@
 export interface PageInfo {
-  total: number
-  per_page: number
-  current_page: number
-  total_pages: number
+  total: number;
+  per_page: number;
+  current_page: number;
+  total_pages: number;
 }
 
 export interface ObjectLiteral {

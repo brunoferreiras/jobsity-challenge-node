@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common'
-import { MailService } from './mail.service'
-import { MailProcessor } from './mail.processor'
-import { MailerModule } from '@nestjs-modules/mailer'
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
-import { BullModule } from '@nestjs/bull'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { Module } from '@nestjs/common';
+import { MailService } from './mail.service';
+import { MailProcessor } from './mail.processor';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { BullModule } from '@nestjs/bull';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 
 @Module({
@@ -32,7 +32,7 @@ import { join } from 'path';
               strict: true,
             },
           },
-        }
+        };
       },
     }),
     BullModule.registerQueueAsync({
@@ -43,18 +43,13 @@ import { join } from 'path';
         redis: {
           host: configService.get('redis.host'),
           port: configService.get('redis.port'),
-          password: configService.get('redis.password')
+          password: configService.get('redis.password'),
         },
       }),
     }),
   ],
   controllers: [],
-  providers: [
-    MailService,
-    MailProcessor,
-  ],
-  exports: [
-    MailService,
-  ],
+  providers: [MailService, MailProcessor],
+  exports: [MailService],
 })
-export class MailModule { }
+export class MailModule {}

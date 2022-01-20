@@ -53,7 +53,6 @@ make bash-api
 ### Inside on container
 yarn test // Running all the unit/feature tests
 yarn test:cov // Running the coverage code. Output is ./coverage
-yarn test:e2e // Running the end-to-end tests.
 ```
 
 ## Mailhog

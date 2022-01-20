@@ -1,6 +1,6 @@
 export default () => ({
   app: {
-    name: 'Stocks App'
+    name: 'Stocks App',
   },
   port: parseInt(process.env.PORT, 10) || 3040,
   database: {
@@ -14,7 +14,7 @@ export default () => ({
     salt: process.env.BCRYPT_SALT || 12,
   },
   stocks_service: {
-    url: process.env.STOCKS_SERVICE_URL || 'http://stock:3000/api/v1'
+    url: process.env.STOCKS_SERVICE_URL || 'http://stock:3000/api/v1',
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'secret',
@@ -31,6 +31,6 @@ export default () => ({
     secure: process.env.MAIL_SECURE || false,
     user: process.env.MAIL_USER || '',
     pass: process.env.MAIL_PASS || '',
-    from: process.env.MAIL_FROM || 'noreply@stocks.com'
-  }
+    from: process.env.MAIL_FROM || 'noreply@stocks.com',
+  },
 });

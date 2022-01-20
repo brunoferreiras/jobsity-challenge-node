@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { StocksRepository } from './stocks.repository';
 import { StocksService } from './stocks.service';
-import { HttpModule } from '@nestjs/axios'
+import { HttpModule } from '@nestjs/axios';
 
 describe('StocksService', () => {
   let service: StocksService;
@@ -12,8 +12,8 @@ describe('StocksService', () => {
       imports: [HttpModule],
       providers: [
         StocksService,
-        { provide: StocksRepository, useValue: { registerRequest: jest.fn() }},
-        { provide: ConfigService, useValue: { get: jest.fn() }}
+        { provide: StocksRepository, useValue: { registerRequest: jest.fn() } },
+        { provide: ConfigService, useValue: { get: jest.fn() } },
       ],
     }).compile();
 

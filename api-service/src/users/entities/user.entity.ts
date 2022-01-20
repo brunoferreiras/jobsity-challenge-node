@@ -1,11 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Transform } from 'class-transformer';
-import { Column, CreateDateColumn, Entity, Index, ObjectID, ObjectIdColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  ObjectID,
+  ObjectIdColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class UserEntity {
   @ObjectIdColumn()
-  @Transform(({ value }) => { return value.toString() }, { toPlainOnly: true })
+  @Transform(
+    ({ value }) => {
+      return value.toString();
+    },
+    { toPlainOnly: true },
+  )
   _id?: ObjectID;
 
   @Column()
@@ -23,14 +36,14 @@ export class UserEntity {
   type: string;
 
   get id(): string {
-    return this._id.toHexString()
+    return this._id.toHexString();
   }
 
   @CreateDateColumn()
   @ApiProperty({ description: 'The date of creation of the user' })
-  created_at: Date
+  created_at: Date;
 
   @UpdateDateColumn()
   @ApiProperty({ description: 'The date of updating of the user' })
-  updated_at: Date
+  updated_at: Date;
 }

@@ -4,7 +4,7 @@ import { getConnection } from 'typeorm';
 import { AppModule } from './app.module';
 import { setupSwagger } from './swagger';
 
-async function bootstrap () {
+async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = process.env.PORT || 3040;
   app.setGlobalPrefix('api/v1');
@@ -13,7 +13,7 @@ async function bootstrap () {
       transform: true,
     }),
   );
-  setupSwagger(app)
+  setupSwagger(app);
   // Check database connection
   const connection = getConnection();
   const { isConnected } = connection;
